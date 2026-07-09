@@ -1,0 +1,28 @@
+{
+
+    "root": "envoyeur",
+
+    "portal": [
+        {
+            "url": "/creation-envoyeur",
+            "method": "get",
+            "action": "creationEnvoyeur"
+        },
+        {
+            "url": "/list-envoyeur",
+            "method": "get",
+            "action": "listEnvoyeur"
+        },
+        {
+            "url": "/update-envoyeur",
+            "method": "get",
+            "action": "updateEnvoyeur"
+        },
+        {
+            "url": "/delete-envoyeur",
+            "method": "get",
+            "action": "deleteEnvoyeur"
+        }
+    ]
+    
+}

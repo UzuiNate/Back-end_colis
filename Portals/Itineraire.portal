@@ -1,0 +1,28 @@
+{
+
+    "root": "itineraire",
+
+    "portal": [
+        {
+            "url": "/creation-itineraire",
+            "method": "get",
+            "action": "creationItineraire"
+        },
+        {
+            "url": "/afficher-itineraire",
+            "method": "post",
+            "action": "afficherItineraire"
+        },
+        {
+            "url": "/update-itineraire/{update}",
+            "method": "get",
+            "action": "updateItineraire"
+        },
+        {
+            "url": "/delete-itineraire/{delete}",
+            "method": "get",
+            "action": "deleteItineraire"
+        }
+        
+    ]
+}

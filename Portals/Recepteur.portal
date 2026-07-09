@@ -1,0 +1,26 @@
+{
+	"root": "colis",
+	"portal": [
+		{
+			"url": "/creation-colis",
+			"method": "get",
+			"action": "creationColis"
+		},
+		{
+			"url": "/list-colis",
+			"method": "get",
+			"action": "listColis"
+		},
+		{
+			"url": "/update-colis",
+			"method": "get",
+			"action": "updateColis"
+		},
+		{
+			"url": "/delete-colis",
+			"method": "get",
+			"action": "deleteColis"
+		}
+		
+	]
+}

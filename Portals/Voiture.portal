@@ -1,0 +1,28 @@
+{
+
+    "root": "voiture",
+
+    "portal": [
+        {
+            "url": "/creation-voiture",
+            "method": "get",
+            "action": "creationVoiture"
+        },
+        {
+            "url": "/list-voiture",
+            "method": "get",
+            "action": "listVoiture"
+        },
+        {
+            "url": "/update-voiture",
+            "method": "get",
+            "action": "updateVoiture"
+        },
+        {
+            "url": "/delete-voiture",
+            "method": "get",
+            "action": "deleteVoiture"
+        }
+        
+    ]
+}
