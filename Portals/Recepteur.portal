@@ -2,24 +2,24 @@
 	"root": "colis",
 	"portal": [
 		{
-			"url": "/creation-colis",
+			"url": "/creation-recepteur",
 			"method": "get",
-			"action": "creationColis"
+			"action": "creationRecepteur"
 		},
 		{
-			"url": "/list-colis",
+			"url": "/list-recepteur",
 			"method": "get",
-			"action": "listColis"
+			"action": "listRecepteur"
 		},
 		{
-			"url": "/update-colis",
+			"url": "/update-recepteur",
 			"method": "get",
 			"action": "updateColis"
 		},
 		{
-			"url": "/delete-colis",
+			"url": "/delete-recepteur",
 			"method": "get",
-			"action": "deleteColis"
+			"action": "deleteRecepteur"
 		}
 		
 	]

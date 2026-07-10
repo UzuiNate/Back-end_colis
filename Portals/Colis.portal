@@ -3,7 +3,7 @@
 	"portal": [
 		{
 			"url": "/creation-colis",
-			"method": "get",
+			"method": "post",
 			"action": "creationColis"
 		},
 		{
@@ -13,13 +13,18 @@
 		},
 		{
 			"url": "/update-colis",
-			"method": "get",
+			"method": "post",
 			"action": "updateColis"
 		},
 		{
 			"url": "/delete-colis",
-			"method": "get",
+			"method": "post",
 			"action": "deleteColis"
+		},
+		{
+			"url": "/recherche-colis/{rechercheColis}",
+			"method": "post",
+			"action": "rechercheColis"
 		}
 		
 	]

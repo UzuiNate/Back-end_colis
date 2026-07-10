@@ -19,7 +19,7 @@
             "action": "updateVoiture"
         },
         {
-            "url": "/delete-voiture",
+            "url": "/delete-voiture/{delete}",
             "method": "get",
             "action": "deleteVoiture"
         }

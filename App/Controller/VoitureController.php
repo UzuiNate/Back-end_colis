@@ -6,8 +6,8 @@ class VoitureController{
     //CREATION
     public function creationVoiture (string $idVoi, string $designVoi, int $fras_Voi, string $Code_It) {
 
-        //$data = file_get_contents("php://input");
-        //$data_ = json_decode($data);
+        $data = file_get_contents("php://input");
+        $data_ = json_decode($data, true);
 
         $db = connectDatabase();
         $result = [];
