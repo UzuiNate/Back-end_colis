@@ -5,7 +5,7 @@
     "portal": [
         {
             "url": "/creation-itineraire",
-            "method": "get",
+            "method": "post",
             "action": "creationItineraire"
         },
         {
@@ -15,12 +15,12 @@
         },
         {
             "url": "/update-itineraire/{update}",
-            "method": "get",
+            "method": "post",
             "action": "updateItineraire"
         },
         {
             "url": "/delete-itineraire/{delete}",
-            "method": "get",
+            "method": "post",
             "action": "deleteItineraire"
         }
         

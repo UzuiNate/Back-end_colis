@@ -11,7 +11,10 @@ class ItineraireController {
         $db = connectDatabase();
         $result = [];
 
-        if (!isset($data_['codeIt'], $data_['villDep'], $data_['villAr'])){
+        if (!isset($data_['codeIt'], 
+                   $data_['villDep'], 
+                   $data_['villAr'])
+            ){
             $result['status'] = "error";
             $result['message'] = "arguments not set";
         } else {
@@ -72,7 +75,10 @@ class ItineraireController {
         $data = file_get_contents("php://input");
         $data_ = json_decode($data, true);
 
-        if (!isset($data_['villArr'], $data_['villDep'], $data_['codeIt'])){
+        if (!isset($data_['villArr'],
+                   $data_['villDep'], 
+                   $data_['codeIt'])
+            ){
             $result['status'] = "error";
             $result['message'] = "arguments missing";
         } else {
@@ -81,7 +87,6 @@ class ItineraireController {
             $codeIt = $data_['codeIt'];
 
             $query = "UPDATE itineraire SET villArr = '$villAr', villDep = '$villDep' WHERE codeIt = '$codeIt';";
-            
             try {
                 $stmt = $db->prepare($query);
                 $stmt->execute();

@@ -10,7 +10,8 @@ class EnvoyeurController{
         $db = connectDatabase();
         $result = [];
 
-        if (!isset($data_['idEnvoi'], $data_['nomEnvoyeur'], $data_['emailEnvoyeur'], $data_['frais_Envoi'], $data_['dateEnvois'], $data_['nomRecepteur'], $data_['contactRecepteur'])){
+        if (!isset($data_['idEnvoi'], $data_['nomEnvoyeur'], $data_['emailEnvoyeur'], $data_['frais_Envoi'], $data_['dateEnvois'], $data_['nomRecepteur'], $data_['contactRecepteur'])
+            && !is_int($data_['idEnvoi']) && !is_int($data_['frais_Envoi'])){
             $result['status'] = 'error';
             $result['message'] = "argument missmatch";
         } else {
@@ -42,6 +43,7 @@ class EnvoyeurController{
         return json_encode($result);
     }
 
+/*
     //LISTER
     public function listEnvoyeur() {
         $db = connectDatabase();
@@ -60,35 +62,49 @@ class EnvoyeurController{
 
         return json_encode($result);
     }
-
+*/
     //UPDATE
     public function updateEnvoyeur() {
         $db = connectDatabase();
         $result = [];
-
         $data = file_get_contents("php://input");
         $data_ = json_decode($data, true);
 
-        if (!isset($data_['newNom'], $data_['oldNom'])){
+        if (!isset($data_['idEnvoi'], 
+                   $data_['nomEnvoyeur'],
+                   $data_['emailEnvoyeur'], 
+                   $data_['frais_Envoi'], 
+                   $data_['dateEnvois'], 
+                   $data_['nomRecepteur'], 
+                   $data_['contactRecepteur'])
+            ){
             $result['status'] = "error";
             $result['message'] = "arguments missing";
-
         } else {
-            $newNom = $data_['newNom'];
-            $oldNom = $data_['oldNom'];
+            $idEnvoi = $data_['idEnvoi'];
+            $nomEnvoyeur = $data_['nomEnvoyeur'];
+            $frais_Envoi = $data_['frais_Envoi'];
+            $dateEnvois = $data_['dateEnvois'];
+            $nomRecepteur = $data_['code_Recept'];
+            $contactRecepteur = $data_['contactRecepteur'];
 
-            $query = "UPDATE envoyeur SET nomEnvoyeur = '". $newNom ."' WHERE nomEnvoyeur = '". $oldNom ."';";
-
+            $query = "UPDATE envoyeur SET 
+                nomEnvoyeur = '$nomEnvoyeur',
+                frais_Envoi = '$frais_Envoi',
+                dateEnvois = '$dateEnvois',
+                nomRecepteur = '$nomRecepteur',
+                contactRecepteur = '$contactRecepteur',
+                 WHERE idEnvoi = '$idEnvoi';";
             try {
                 $stmt = $db->prepare($query);
                 $stmt->execute();
 
                 $result['status'] = "success";
-                $result['message'] = "sender modification successfull";
+                $result['message'] = "update succcessfull";
 
             } catch (PDOException $e){
                 $result['status'] = "error";
-                $result['message'] = "an error occured while updating a sender's information";
+                $result['message'] = "an erro occured while updating informations";
             }
         }
 

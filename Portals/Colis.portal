@@ -25,6 +25,21 @@
 			"url": "/recherche-colis/{rechercheColis}",
 			"method": "post",
 			"action": "rechercheColis"
+		},
+		{
+			"url": "/somme-colis",
+			"method": "get",
+			"action": "sommeColis"
+		},
+		{
+			"url": "/list-colis-recu",
+			"method": "get",
+			"action": "listColisRecu"
+		},
+		{
+			"url": "/list-colis-envoyer",
+			"method": "get",
+			"action": "listColisEnvoyer"
 		}
 		
 	]

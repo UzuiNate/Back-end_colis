@@ -3,22 +3,17 @@
 	"portal": [
 		{
 			"url": "/creation-recepteur",
-			"method": "get",
+			"method": "post",
 			"action": "creationRecepteur"
 		},
 		{
-			"url": "/list-recepteur",
-			"method": "get",
-			"action": "listRecepteur"
-		},
-		{
 			"url": "/update-recepteur",
-			"method": "get",
+			"method": "post",
 			"action": "updateColis"
 		},
 		{
 			"url": "/delete-recepteur",
-			"method": "get",
+			"method": "post",
 			"action": "deleteRecepteur"
 		}
 		

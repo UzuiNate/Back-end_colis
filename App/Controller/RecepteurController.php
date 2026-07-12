@@ -14,7 +14,9 @@ class RecepteurController{
         $db = connectDatabase();
         $result = [];
         
-        if (!isset($data_['codeRecept'], $data_['date_recept'])){
+        if (!isset($data_['codeRecept'], 
+                   $data_['date_recept'])
+            && !is_int($data_['codeRecept'])){
             $result['status'] = "error";
             $result['message'] = "argument missing";
 
@@ -69,6 +71,7 @@ class RecepteurController{
         return json_encode($result);
     }
 
+/*
     //LISTER
     public function listRecepteur() {
         $db = connectDatabase();
@@ -88,6 +91,7 @@ class RecepteurController{
 
         return json_encode($result);
     }
+*/
 
     //UPDATE
     public function updateVoiture() {
@@ -148,4 +152,139 @@ class RecepteurController{
 
         return json_encode($result);
     }
+
+/*
+    // Inclure la bibliothèque FPDF (Assurez-vous de l'avoir téléchargée ou installée via composer)
+    require('fpdf/fpdf.php');
+
+    function genererFicheLivraison($db, $codeRecept) {
+    // 1. Protection contre les injections SQL (Requête préparée)
+    $query = "SELECT e.dateEnvois AS Date_Envoi,
+                     e.nomEnvoyeur AS Nom_Expediteur,
+                     v.idVoi AS ID_Voiture,
+                     i.villDep AS Ville_Depart,
+                     i.villArr AS Ville_Arrivee,
+                     c.designColis AS Description_Colis,
+                     e.frais_Envoi AS Frais_Envoi,
+                     e.nomRecepteur AS Nom_Destinataire,
+                     e.contactRecepteur AS Contact_Destinataire
+              FROM colis c
+              JOIN envoyeur e ON c.id_Envoi = e.idEnvoi
+              JOIN voiture v ON c.id_Voi = v.idVoi
+              JOIN itineraire i ON v.code_It = i.codeIt
+              WHERE c.code_Recept = :codeRecept;";
+
+        $stmt = $db->prepare($query);
+        $stmt->execute(['codeRecept' => $codeRecept]);
+        $colis = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$colis) {
+            die("Erreur : Aucun colis trouvé pour ce code récepteur.");
+        }
+
+        // 2. Initialisation et configuration de FPDF
+        $pdf = new FPDF('P', 'mm', 'A4');
+        $pdf->AddPage();
+        $pdf->SetAutoPageBreak(true, 15);
+
+        // Encodage des textes en ISO-8859-1 pour FPDF (évite les bugs d'accents)
+        $nomExp = utf8_decode($colis['Nom_Expediteur']);
+        $nomDest = utf8_decode($colis['Nom_Destinataire']);
+        $descColis = utf8_decode($colis['Description_Colis']);
+        $vDep = utf8_decode($colis['Ville_Depart']);
+        $vArr = utf8_decode($colis['Ville_Arrivee']);
+
+        // --- EN-TÊTE DU DOCUMENT ---
+        $pdf->SetFillColor(30, 58, 138); // Bleu Marine foncé (#1e3a8a)
+        $pdf->Rect(0, 0, 210, 40, 'F');
+        
+        $pdf->SetFont('Helvetica', 'B', 20);
+        $pdf->SetTextColor(255, 255, 255);
+        $pdf->SetXY(15, 12);
+        $pdf->Cell(100, 10, 'LOGITRANS SERVICES', 0, 0, 'L');
+        
+        $pdf->SetFont('Helvetica', 'B', 13);
+        $pdf->SetXY(120, 12);
+        $pdf->Cell(75, 10, 'FICHE DE LIVRAISON', 0, 1, 'R');
+
+        // Badge Status
+        $pdf->SetXY(15, 24);
+        $pdf->SetFillColor(16, 185, 129); // Vert (#10b981)
+        $pdf->SetTextColor(255, 255, 255);
+        $pdf->SetFont('Helvetica', 'B', 9);
+        $pdf->Cell(35, 6, 'COLIS BIEN RECEVOIR', 0, 0, 'C', true);
+
+        // Espace de sécurité après l'en-tête
+        $pdf->Ln(25); 
+
+        // --- BLOCS EXPÉDITEUR & DESTINATAIRE ---
+        $pdf->SetTextColor(30, 41, 59); // Couleur texte sombre
+        $yStart = $pdf->GetY();
+
+        // Colonne Gauche : Expéditeur
+        $pdf->SetXY(15, $yStart);
+        $pdf->SetFont('Helvetica', 'B', 11);
+        $pdf->SetTextColor(30, 58, 138);
+        $pdf->Cell(85, 6, 'EXPEDITEUR', 'B', 1, 'L');
+        $pdf->SetTextColor(30, 41, 59);
+        $pdf->SetFont('Helvetica', '', 10);
+        $pdf->SetX(15); $pdf->Cell(85, 6, 'Nom : ' . $nomExp, 0, 1, 'L');
+        $pdf->SetX(15); $pdf->Cell(85, 6, 'Date d\'envoi : ' . $colis['Date_Envoi'], 0, 1, 'L');
+
+        // Colonne Droite : Destinataire
+        $pdf->SetXY(110, $yStart);
+        $pdf->SetFont('Helvetica', 'B', 11);
+        $pdf->SetTextColor(30, 58, 138);
+        $pdf->Cell(85, 6, 'DESTINATAIRE', 'B', 1, 'L');
+        $pdf->SetTextColor(30, 41, 59);
+        $pdf->SetFont('Helvetica', '', 10);
+        $pdf->SetX(110); $pdf->Cell(85, 6, 'Nom : ' . $nomDest, 0, 1, 'L');
+        $pdf->SetX(110); $pdf->Cell(85, 6, 'Contact : ' . $colis['Contact_Destinataire'], 0, 1, 'L');
+
+        $pdf->Ln(15);
+
+        // --- DÉTAILS DU TRANSPORT ---
+        $pdf->SetFont('Helvetica', 'B', 11);
+        $pdf->SetTextColor(30, 58, 138);
+        $pdf->Cell(180, 6, 'DETAILS DU TRANSPORT', 'B', 1, 'L');
+        $pdf->SetTextColor(30, 41, 59);
+        $pdf->SetFont('Helvetica', '', 10);
+        $pdf->Cell(90, 7, 'Ville de depart : ' . $vDep, 0, 0, 'L');
+        $pdf->Cell(90, 7, 'Ville d\'arrivee : ' . $vArr, 0, 1, 'L');
+        $pdf->Cell(90, 7, 'ID Voiture / Transport : ' . $colis['ID_Voiture'], 0, 1, 'L');
+
+        $pdf->Ln(10);
+
+        // --- DESCRIPTION DU COLIS (Tableau) ---
+        $pdf->SetFont('Helvetica', 'B', 10);
+        $pdf->SetFillColor(241, 245, 249); // Gris clair pour l'entête
+        $pdf->Cell(180, 8, 'DESIGNATION DU COLIS', 1, 1, 'L', true);
+        
+        $pdf->SetFont('Helvetica', '', 10);
+        // MultiCell gère automatiquement les retours à la ligne si la description est longue
+        $pdf->MultiCell(180, 8, $descColis, 1, 'L');
+
+        $pdf->Ln(10);
+
+        // --- MONTANT / FRAIS ---
+        $pdf->SetX(110);
+        $pdf->SetFillColor(239, 246, 255); // Fond bleu très clair
+        $pdf->SetFont('Helvetica', 'B', 10);
+        $pdf->Cell(45, 10, 'FRAIS D\'ENVOI :', 1, 0, 'R', true);
+        $pdf->SetFont('Helvetica', 'B', 12);
+        $pdf->SetTextColor(30, 58, 138);
+        $pdf->Cell(40, 10, number_format($colis['Frais_Envoi'], 0, ',', ' ') . ' Ar', 1, 1, 'C', true);
+
+        // --- PIED DE PAGE ---
+        $pdf->SetY(-30);
+        $pdf->SetFont('Helvetica', 'I', 8);
+        $pdf->SetTextColor(148, 163, 184);
+        $pdf->Cell(180, 4, utf8_decode('Ce document confirme la bonne réception du colis par le destinataire.'), 0, 1, 'C');
+        $pdf->Cell(180, 4, 'Merci d\'avoir choisi LogiTrans Services.', 0, 1, 'C');
+
+        // 3. Sortie du PDF (Téléchargement direct dans le navigateur)
+        $pdf->Output('D', 'Fiche_Livraison_' . $codeRecept . '.pdf');
+    }
+*/
+
 }

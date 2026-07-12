@@ -5,22 +5,17 @@
     "portal": [
         {
             "url": "/creation-envoyeur",
-            "method": "get",
+            "method": "post",
             "action": "creationEnvoyeur"
         },
         {
-            "url": "/list-envoyeur",
-            "method": "get",
-            "action": "listEnvoyeur"
-        },
-        {
             "url": "/update-envoyeur",
-            "method": "get",
+            "method": "post",
             "action": "updateEnvoyeur"
         },
         {
             "url": "/delete-envoyeur",
-            "method": "get",
+            "method": "post",
             "action": "deleteEnvoyeur"
         }
     ]
