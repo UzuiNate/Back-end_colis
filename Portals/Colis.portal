@@ -2,11 +2,6 @@
 	"root": "colis",
 	"portal": [
 		{
-			"url": "/creation-colis",
-			"method": "post",
-			"action": "creationColis"
-		},
-		{
 			"url": "/list-colis",
 			"method": "get",
 			"action": "listColis"

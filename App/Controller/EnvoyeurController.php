@@ -10,7 +10,7 @@ class EnvoyeurController{
         $db = connectDatabase();
         $result = [];
 
-        if (!isset($data_['idEnvoi'], $data_['nomEnvoyeur'], $data_['emailEnvoyeur'], $data_['frais_Envoi'], $data_['dateEnvois'], $data_['nomRecepteur'], $data_['contactRecepteur'])
+        if (!isset($data_['idEnvoi'], $data_['nomEnvoyeur'], $data_['emailEnvoyeur'], $data_['designColis'], $data_['frais_Envoi'], $data_['dateEnvois'], $data_['nomRecepteur'], $data_['contactRecepteur'])
             && !is_int($data_['idEnvoi']) && !is_int($data_['frais_Envoi'])){
             $result['status'] = 'error';
             $result['message'] = "argument missmatch";
@@ -18,13 +18,14 @@ class EnvoyeurController{
             $idEnvoi = $data_['idEnvoi'];
             $nomEnvoyeur = $data_['nomEnvoyeur'];
             $emailEnvoyeur = $data_['emailEnvoyeur'];
+            $designColis = $data ['designColis'];
             $frais_Envoi = $data_['frais_Envoi'];
             $dateEnvois = $data_['dateEnvois'];
             $nomRecepteur = $data_['nomRecepteur'];
             $contactRecepteur = $data_['contactRecepteur'];
 
-            $query = "INSERT INTO envoyeur (idEnvoi,nomEnvoyeur,emailEnvoyeur,frais_Envoi,dateEnvois,nomRecepteur,contactRecepteur)
-            VALUES('$idEnvoi', '$nomEnvoyeur', '$emailEnvoyeur', '$frais_Envoi', '$dateEnvois', '$nomRecepteur', '$contactRecepteur');";
+            $query = "INSERT INTO envoyeur (idEnvoi,nomEnvoyeur,emailEnvoyeur,designColis,frais_Envoi,dateEnvois,nomRecepteur,contactRecepteur)
+            VALUES('$idEnvoi', '$nomEnvoyeur', '$emailEnvoyeur','$designColis', '$frais_Envoi', '$dateEnvois', '$nomRecepteur', '$contactRecepteur');";
     
             try {
                 $stmt = $db->prepare($query);
@@ -72,7 +73,8 @@ class EnvoyeurController{
 
         if (!isset($data_['idEnvoi'], 
                    $data_['nomEnvoyeur'],
-                   $data_['emailEnvoyeur'], 
+                   $data_['emailEnvoyeur'],
+                   $data_['designColis'], 
                    $data_['frais_Envoi'], 
                    $data_['dateEnvois'], 
                    $data_['nomRecepteur'], 
@@ -83,6 +85,7 @@ class EnvoyeurController{
         } else {
             $idEnvoi = $data_['idEnvoi'];
             $nomEnvoyeur = $data_['nomEnvoyeur'];
+            $designColis = $data_['designColis'];
             $frais_Envoi = $data_['frais_Envoi'];
             $dateEnvois = $data_['dateEnvois'];
             $nomRecepteur = $data_['code_Recept'];
@@ -90,6 +93,7 @@ class EnvoyeurController{
 
             $query = "UPDATE envoyeur SET 
                 nomEnvoyeur = '$nomEnvoyeur',
+                designColis = '$designColis',
                 frais_Envoi = '$frais_Envoi',
                 dateEnvois = '$dateEnvois',
                 nomRecepteur = '$nomRecepteur',

@@ -3,6 +3,7 @@ require_once dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . "connection.php";
 
 class ColisController{
 
+/*   
     //CREATION
     public function creationColis () {
 
@@ -48,13 +49,16 @@ class ColisController{
 
         return json_encode($result);
     }
-
+*/
     //LISTER
     public function listColis() {
         $db = connectDatabase();
         $result = [];
 
-        $query = "SELECT * FROM colis";
+        $query = "SELECT colis.idColis, envoyeur.designColis, colis.id_Voi, colis.id_Envoi, colis.code_Recept
+            FROM colis 
+            JOIN envoyeur ON colis.id_Envoi = envoyeur.idEnvoi
+            JOIN voiture ON colis.id_Voi = voiture.idVoi;";
         try {
             $stmt = $db->prepare($query);
             $stmt->execute();
@@ -85,11 +89,12 @@ class ColisController{
             $id_Envoi = $data_['id_Envoi'];
             $code_Recept = $data_['code_Recept'];
 
-            $query = "UPDATE colis SET 
-                designColis = '$designColis',
-                id_Voi = '$id_Voi',
-                id_Envoi = '$id_Envoi',
-                code_Recept = '$code_Recept',
+            $query = "UPDATE colis 
+                JOIN envoyeur ON colis.id_Envoi = envoyeur.idEnvoi SET 
+                envoyeur.designColis = '$designColis',
+                colis.id_Voi = '$id_Voi',
+                colis.id_Envoi = '$id_Envoi',
+                colis.code_Recept = '$code_Recept',
                  WHERE idColis = '$idColis';";
             try {
                 $stmt = $db->prepare($query);
@@ -147,7 +152,10 @@ class ColisController{
             $result['message'] = "id not set";
         } else {
             $rechercheColis = $data_['rechercheId'];
-            $query = "SELECT * FROM colis WHERE idColis = '$rechercheColis' OR designColis LIKE '%$rechercheColis%';";
+            $query = "SELECT colis.idColis, envoyeur.designColis, colis.id_Voi, colis.id_Envoi, colis.code_Recept 
+                FROM colis 
+                JOIN envoyeur ON colis.id_Envoi = envoyeur.idEnvoi 
+                WHERE idColis = '$rechercheColis' OR designColis LIKE '%$rechercheColis%';";
             try {
                 $stmt = $db->prepare($query);
                 $stmt->execute();
@@ -188,10 +196,11 @@ class ColisController{
         $result = [];
 
         try{
-            $query = "SELECT colis.idColis, envoyeur.idEnvoi, envoyeur.nomEnvoyeur, envoyeur.emailEnvoyeur, recepteur.codeRecept, recepteur.date_recept
+            $query = "SELECT colis.idColis, envoyeur.idEnvoi, envoyeur.nomEnvoyeur, envoyeur.emailEnvoyeur, envoyeur.designColis,recepteur.codeRecept, recepteur.date_recept
                 FROM envoyeur 
                 JOIN colis ON colis.id_Envoi = envoyeur.idEnvoi
-                JOIN recepteur ON colis.code_Recept = recepteur.codeRecept;";
+                JOIN recepteur ON colis.code_Recept = recepteur.codeRecept
+                WHERE colis.code_Recept != NULL;";
             $stmt = $db->prepare($query);
             $stmt->execute();
     
@@ -212,7 +221,8 @@ class ColisController{
         try{
             $query = "SELECT colis.idColis, envoyeur.idEnvoi, envoyeur.nomEnvoyeur, envoyeur.emailEnvoyeur, envoyeur.frais_Envoi, envoyeur.dateEnvois, envoyeur.nomRecepteur, envoyeur.contactRecepteur
                 FROM colis
-                JOIN envoyeur ON colis.id_Envoi = envoyeur.idEnvoi;";
+                JOIN envoyeur ON colis.id_Envoi = envoyeur.idEnvoi
+                WHERE colis.code_Recept = NULL;";
             $stmt = $db->prepare($query);
             $stmt->execute();
     

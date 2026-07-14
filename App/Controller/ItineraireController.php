@@ -13,14 +13,14 @@ class ItineraireController {
 
         if (!isset($data_['codeIt'], 
                    $data_['villDep'], 
-                   $data_['villAr'])
+                   $data_['villArr'])
             ){
             $result['status'] = "error";
             $result['message'] = "arguments not set";
         } else {
             $codeIt = $data_['codeIt'];
-            $villDep = $data_['villeDep'];
-            $villArr = $data_['villeAr'];
+            $villDep = $data_['villDep'];
+            $villArr = $data_['villArr'];
             $query = "INSERT INTO itineraire (codeIt,villDep,villArr)
             VALUES('$codeIt', '$villDep', '$villArr');";
 
@@ -33,7 +33,7 @@ class ItineraireController {
 
             } catch (PDOException $e){
                 $result['status'] = "error";
-                $result['message'] = "an error occured while trying to do an insertion";
+                $result['message'] = "an error occured while trying to do an insertion" . $e->getMessage();
             }
         }
 
